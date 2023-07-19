@@ -1,0 +1,11 @@
+<h1>Main Route</h1>
+<button mat-button (click)="openModal()">Create</button>
+<div>
+    <h2>Your Boards</h2>
+    <ul class="boards">
+        <li *ngFor="let board of usersBoards">
+            {{ board.title }} - {{ board.owner }}
+        </li>
+    </ul>
+
+</div>

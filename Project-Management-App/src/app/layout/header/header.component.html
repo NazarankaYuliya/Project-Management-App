@@ -1,0 +1,27 @@
+<header>
+    <nav *ngIf="isAuthenticated(); else unauthenticatedNav">
+        <ul>
+            <li><a>Create New Board</a></li>
+            <li><a routerLink="/edit-profile">Edit Profile</a></li>
+            <li><a routerLink="/logout">Logout</a></li>
+        </ul>
+    </nav>
+    <ng-template #unauthenticatedNav>
+        <nav>
+            <!--этот для невошедших -->
+            <div class="sing-buttons">
+                <a routerLink="/login" class="button">Login</a>
+                <a routerLink="/signup" class="button">Sign Up</a>
+            </div>
+            <div class="language">
+                <select>
+                    <option>English</option>
+                    <option>Русский</option>
+                </select>
+            </div>
+        </nav>
+
+
+    </ng-template>
+
+</header>

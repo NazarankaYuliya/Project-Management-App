@@ -1,0 +1,39 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  column-gap: 20px;
+}
+
+li {
+  padding: 10px;
+  border: 1px solid #008000;
+}
+
+a {
+  text-decoration: none;
+}
+
+.sing-buttons {
+  display: flex;
+  column-gap: 20px;
+}
+
+.button {
+  padding: 10px;
+  border: 1px solid #000000;
+}
