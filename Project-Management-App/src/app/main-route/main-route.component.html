@@ -1,10 +1,11 @@
 <h1>Main Route</h1>
-<button mat-button (click)="openModal()">Create</button>
+
 <div>
     <h2>Your Boards</h2>
     <ul class="boards">
-        <li *ngFor="let board of usersBoards">
+        <li *ngFor="let board of (boards$ | async)">
             {{ board.title }} - {{ board.owner }}
+            <button *ngIf="board._id" (click)="deleteBoard(board._id)">Delete board</button>
         </li>
     </ul>
 

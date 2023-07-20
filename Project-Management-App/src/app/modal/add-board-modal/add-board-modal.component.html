@@ -1,7 +1,7 @@
 <h2>Create New Board</h2>
-<form (ngSubmit)="onSubmit()">
-    <label for="boardTitle">Title:</label>
-    <input type="text" id="boardTitle" name="title" [(ngModel)]="newBoard.title" required>
-    <button type="submit" mat-button>Create Board</button>
+<form [formGroup]="boardForm" (ngSubmit)="createBoard()">
+    <label>Title</label>
+    <input matInput formControlName="title" required>
+    <button mat-raised-button color="primary" type="submit">Создать</button>
+    <button mat-raised-button color="warn" type="button" (click)="closeModal()">Close</button>
 </form>
-<button mat-button (click)="close()">Close</button>

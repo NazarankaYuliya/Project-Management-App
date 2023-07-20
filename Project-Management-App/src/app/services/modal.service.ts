@@ -7,6 +7,8 @@ import { AddBoardModalComponent } from '../modal/add-board-modal/add-board-modal
   providedIn: 'root',
 })
 export class ModalService {
+  private isModalOpen = false;
+
   constructor(private dialog: MatDialog) {}
 
   addBoardModal(): MatDialogRef<AddBoardModalComponent, string> {

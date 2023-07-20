@@ -14,8 +14,10 @@ import { MainRouteComponent } from './main-route/main-route.component';
 import { BackendService } from './services/backend.service';
 import { AddBoardModalComponent } from './modal/add-board-modal/add-board-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ModalService } from './services/modal.service';
+import { ConfirmationModalComponent } from './modal/confirmation/confirmation-modal.component';
+import { ProfileComponent } from './authentication/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { ModalService } from './services/modal.service';
     SignupComponent,
     MainRouteComponent,
     AddBoardModalComponent,
+    ConfirmationModalComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,6 +41,7 @@ import { ModalService } from './services/modal.service';
     BrowserAnimationsModule,
     MatDialogModule,
   ],
+
   providers: [BackendService, ModalService],
   bootstrap: [AppComponent],
 })

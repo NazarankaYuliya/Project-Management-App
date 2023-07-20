@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -13,7 +13,7 @@ export class SignupComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private backendService: BackendService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.form = this.formBuilder.group({
@@ -31,7 +31,7 @@ export class SignupComponent {
   }
 
   signup(form: FormGroup) {
-    this.backendService.signup(form.value).subscribe(
+    this.authService.signup(form.value).subscribe(
       (responce) => {
         alert('You are successfully singned up!');
       },

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { Board, User, UserResponse } from '../models/app.models';
+import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { Board, User } from '../models/app.models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,23 @@ import { Board, User, UserResponse } from '../models/app.models';
 export class BackendService {
   private baseUrl = 'https://final-task-backend.up.railway.app';
 
+  boards: BehaviorSubject<Board[]> = new BehaviorSubject<Board[]>([]);
+
+  boards$: Observable<Board[]> = this.boards.asObservable();
+
   constructor(private http: HttpClient) {}
+
+  private getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  private getLogin(): string | null {
+    return localStorage.getItem('login');
+  }
+
+  private updateBoards(boards: Board[]): void {
+    this.boards.next(boards);
+  }
 
   private getHeaders(token: string): HttpHeaders {
     return new HttpHeaders({
@@ -19,31 +35,69 @@ export class BackendService {
     });
   }
 
-  signup(user: User): Observable<any> {
-    return this.http.post(`${this.baseUrl}/auth/signup`, user);
-  }
+  getAllBoards(): Observable<Board[]> {
+    const token = this.getToken();
+    const login = this.getLogin();
 
-  signin(user: User): Observable<any> {
-    return this.http.post(`${this.baseUrl}/auth/signin`, user).pipe(
-      tap((response: any) => {
-        localStorage.setItem('token', response.token as string);
-        localStorage.setItem('login', user.login);
+    if (!token || !login) {
+      return throwError('Token or login not available');
+    }
+
+    const headers = this.getHeaders(token);
+    return this.http.get<Board[]>(`${this.baseUrl}/boards`, { headers }).pipe(
+      map((boards: Board[]) => boards.filter((board) => board.owner === login)),
+      tap((filteredBoards: Board[]) => {
+        this.updateBoards(filteredBoards);
       })
     );
   }
 
-  getUserList(token: string): Observable<any> {
+  deleteBoard(boardId: string): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      return throwError('Token not available');
+    }
+
     const headers = this.getHeaders(token);
-    return this.http.get(`${this.baseUrl}/users`, { headers });
+    return this.http.delete<any>(`${this.baseUrl}/boards/${boardId}`, {
+      headers,
+    });
   }
 
-  getBoardList(token: string): Observable<any> {
+  createBoard(newBoard: Board): Observable<Board> {
+    const token = this.getToken();
+    if (!token) {
+      return throwError('Token not available');
+    }
+
     const headers = this.getHeaders(token);
-    return this.http.get(`${this.baseUrl}/boards/`, { headers });
+    return this.http
+      .post<Board>(`${this.baseUrl}/boards`, newBoard, { headers })
+      .pipe(
+        tap((createdBoard: Board) => {
+          const currentBoards = this.boards.getValue();
+
+          currentBoards.push(createdBoard);
+
+          this.boards.next(currentBoards);
+        })
+      );
   }
 
-  createBoard(board: Board, token: string): Observable<any> {
-    const headers = this.getHeaders(token);
-    return this.http.post<any>(`${this.baseUrl}/boards`, board, { headers });
-  }
+  //deleteBoard(boardId) {}
+
+  // getUserList(token: string): Observable<any> {
+  //   const headers = this.getHeaders(token);
+  //   return this.http.get(`${this.baseUrl}/users`, { headers });
+  // }
+
+  // getBoardList(token: string): Observable<any> {
+  //   const headers = this.getHeaders(token);
+  //   return this.http.get(`${this.baseUrl}/boards/`, { headers });
+  // }
+
+  // createBoard(board: Board, token: string): Observable<any> {
+  //   const headers = this.getHeaders(token);
+  //   return this.http.post<any>(`${this.baseUrl}/boards`, board, { headers });
+  // }
 }

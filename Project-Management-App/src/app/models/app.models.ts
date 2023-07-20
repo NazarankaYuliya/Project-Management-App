@@ -5,8 +5,9 @@ export interface User {
 }
 
 export interface Board {
-  title: string;
-  owner: string;
+  _id?: string;
+  title: string | null;
+  owner: string | null;
   users: string[];
 }
 

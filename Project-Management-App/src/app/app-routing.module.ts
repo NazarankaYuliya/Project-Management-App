@@ -5,6 +5,7 @@ import { LoginComponent } from './authentication/login/login.component';
 import { SignupComponent } from './authentication/signup/signup.component';
 import { FormsModule } from '@angular/forms';
 import { MainRouteComponent } from './main-route/main-route.component';
+import { ProfileComponent } from './authentication/profile/profile.component';
 // import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
@@ -17,9 +18,7 @@ const routes: Routes = [
     component: MainRouteComponent,
   },
 
-  //{ path: 'edit-profile', component: EditProfileComponent },
-  //{ path: 'logout', component: LogoutComponent },
-  // { path: 'create-board', component: CreateBoardComponent },
+  { path: 'profile', component: ProfileComponent },
 ];
 
 @NgModule({

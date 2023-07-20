@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ export class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private backendService: BackendService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.form = this.formBuilder.group({
@@ -30,7 +30,7 @@ export class LoginComponent {
   }
 
   login(form: FormGroup) {
-    this.backendService.signin(form.value).subscribe(
+    this.authService.signin(form.value).subscribe(
       (response) => {
         this.router.navigate(['/main-route']);
       },
