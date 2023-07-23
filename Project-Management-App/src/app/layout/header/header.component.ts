@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddBoardModalComponent } from 'src/app/modal/add-board-modal/add-board-modal.component';
-import { ConfirmationModalComponent } from 'src/app/modal/confirmation/confirmation-modal.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { BackendService } from 'src/app/services/backend.service';
 import { ModalService } from 'src/app/services/modal.service';
@@ -23,24 +21,12 @@ export class HeaderComponent implements OnInit {
     return this.authService.isAuthenticated();
   }
 
-  openCreateBoardDialog(): void {
-    const dialogRef = this.modalService.addBoardModal();
-
-    if (!dialogRef) {
-      return;
-    }
+  openCreateBoardDialog() {
+    this.modalService.addBoardModal();
   }
 
   logout(): void {
-    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
-      data: { message: 'Are you sure you want to log out?' },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.authService.logout();
-      }
-    });
+    this.modalService.logout();
   }
 
   ngOnInit(): void {}

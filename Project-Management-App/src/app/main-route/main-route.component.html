@@ -5,7 +5,9 @@
     <ul class="boards">
         <li *ngFor="let board of (boards$ | async)">
             {{ board.title }} - {{ board.owner }}
+            <button [routerLink]="['/board', board._id]">View board</button>
             <button *ngIf="board._id" (click)="deleteBoard(board._id)">Delete board</button>
+
         </li>
     </ul>
 

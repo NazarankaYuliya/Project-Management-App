@@ -18,6 +18,10 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ModalService } from './services/modal.service';
 import { ConfirmationModalComponent } from './modal/confirmation/confirmation-modal.component';
 import { ProfileComponent } from './authentication/profile/profile.component';
+import { BoardComponent } from './board/board.component';
+import { AddColumnModalComponent } from './modal/add-column-modal/add-column-modal.component';
+import { AddTaskModalComponent } from './modal/add-task-modal/add-task-modal.component';
+import { UpdateColumnsTitleModalComponent } from './modal/update-columns-title-modal/update-columns-title-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,10 @@ import { ProfileComponent } from './authentication/profile/profile.component';
     AddBoardModalComponent,
     ConfirmationModalComponent,
     ProfileComponent,
+    BoardComponent,
+    AddColumnModalComponent,
+    AddTaskModalComponent,
+    UpdateColumnsTitleModalComponent,
   ],
   imports: [
     BrowserModule,

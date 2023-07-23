@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BackendService } from '../services/backend.service';
 import { Board } from '../models/app.models';
 import { map, Observable } from 'rxjs';
-import { ConfirmationModalComponent } from '../modal/confirmation/confirmation-modal.component';
+import { ModalService } from '../services/modal.service';
 
 @Component({
   selector: 'app-main-route',
@@ -15,7 +15,8 @@ export class MainRouteComponent implements OnInit {
 
   constructor(
     private backendService: BackendService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -32,16 +33,6 @@ export class MainRouteComponent implements OnInit {
   }
 
   deleteBoard(boardId: string): void {
-    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
-      data: { message: 'Are you sure you want to delete this board?' },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.backendService.deleteBoard(boardId).subscribe(() => {
-          this.backendService.getAllBoards().subscribe();
-        });
-      }
-    });
+    this.modalService.deleteBoardModal(boardId);
   }
 }

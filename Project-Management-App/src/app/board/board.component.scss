@@ -1,0 +1,43 @@
+.board {
+  display: flex;
+  overflow-x: auto;
+}
+
+.columns-container {
+  display: flex;
+}
+
+.column {
+  flex: 0 0 300px;
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tasks-container {
+  min-height: 100px;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.task-content {
+  flex: 1;
+  cursor: pointer;
+}
+
+button {
+  margin-left: 5px;
+}

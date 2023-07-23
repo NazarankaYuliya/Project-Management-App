@@ -6,7 +6,7 @@ import { SignupComponent } from './authentication/signup/signup.component';
 import { FormsModule } from '@angular/forms';
 import { MainRouteComponent } from './main-route/main-route.component';
 import { ProfileComponent } from './authentication/profile/profile.component';
-// import { AuthGuard } from './auth.guard';
+import { BoardComponent } from './board/board.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
@@ -19,6 +19,7 @@ const routes: Routes = [
   },
 
   { path: 'profile', component: ProfileComponent },
+  { path: 'board/:id', component: BoardComponent },
 ];
 
 @NgModule({
