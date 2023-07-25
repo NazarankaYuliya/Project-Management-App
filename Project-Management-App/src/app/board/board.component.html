@@ -2,18 +2,23 @@
     <div class="columns-container">
         <div class="column" *ngFor="let column of (columns$ | async)">
             <div class="column-header">
-                {{column.order}}
-                {{ column.title }}
+                <h3> {{ column.order }} {{ column.title | uppercase}}</h3>
 
                 <button *ngIf="column._id && boardId" (click)="deleteColumn(column._id, boardId)">Delete Column</button>
             </div>
             <div class="tasks-container">
-                <button>Create Task</button>
-                <div class="task">
+                <div class="task" *ngFor="let task of column.tasks">
+                    <h4>{{task.order}} {{ task.title | uppercase }}</h4>
+                    <p> {{ task.description }}</p>
+                    <button *ngIf="boardId && column._id && task._id"
+                        (click)="deleteTask(boardId, column._id, task._id)">Delete Task</button>
                 </div>
 
             </div>
+            <button mat-button *ngIf=" column._id && boardId" (click)="addTask(column._id,boardId)">Add Task</button>
+
         </div>
-        <button mat-button (click)=" addColumnModal()">Create Column</button>
+
+        <button mat-button (click)=" addColumn()">Create Column</button>
     </div>
 </div>

@@ -23,14 +23,15 @@ export interface Column {
   title: string;
   order: number;
   boardId?: string;
+  tasks?: Task[];
 }
 
 export interface Task {
   _id?: string;
   title: string;
   order: number;
-  boardId: string;
-  columnId: string;
+  boardId?: string;
+  columnId?: string;
   description: string;
   userId: number;
   users: string[];

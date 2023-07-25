@@ -1,0 +1,14 @@
+<div class="column">
+    <div class="column-header">
+        {{ column.order }} {{ column.title }}
+        <button *ngIf="column._id && boardId" (click)="deleteColumn(column._id, boardId)">Delete Column</button>
+    </div>
+    <div class="tasks-container">
+        <div class="task" *ngFor="let task of(tasks$ | async)">
+            {{ task.title }}
+            {{ task.description }}
+        </div>
+    </div>
+    <button mat-button *ngIf="column._id && boardId" (click)="addTask()">Add Task</button>
+
+</div>

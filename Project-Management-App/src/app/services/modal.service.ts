@@ -2,6 +2,7 @@ import { Injectable, Type } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddBoardModalComponent } from '../modal/add-board-modal/add-board-modal.component';
 import { AddColumnModalComponent } from '../modal/add-column-modal/add-column-modal.component';
+import { AddTaskModalComponent } from '../modal/add-task-modal/add-task-modal.component';
 import { ConfirmationModalComponent } from '../modal/confirmation/confirmation-modal.component';
 import { AuthService } from './auth.service';
 import { BackendService } from './backend.service';
@@ -28,11 +29,13 @@ export class ModalService {
     return dialogRef;
   }
 
-  creationModalOpen<T>(component: Type<T>): MatDialogRef<T, any> {
+  creationModalOpen<T>(component: Type<T>, data?: any): MatDialogRef<T, any> {
     this.isModalOpen = true;
     const dialogRef = this.dialog.open(component, {
       width: '400px',
+      height: '400px',
       disableClose: true,
+      data: data,
     });
     return dialogRef;
   }
@@ -52,55 +55,16 @@ export class ModalService {
     }
   }
 
-  addBoardModal() {
+  addTaskModal(boardId: string, columnId: string) {
     if (!this.isModalOpen) {
-      const dialogRef = this.creationModalOpen(AddBoardModalComponent);
+      const dialogRef = this.creationModalOpen(AddTaskModalComponent);
+      dialogRef.componentInstance.boardId = boardId;
+      dialogRef.componentInstance.columnId = columnId;
       dialogRef.afterClosed().subscribe(() => {
         this.isModalOpen = false;
       });
     }
   }
 
-  deleteBoardModal(boardId: string) {
-    if (!this.isModalOpen) {
-      const dialogRef = this.confirmationModalOpen(
-        'Are you sure you want to delete this board?'
-      );
-
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.backendService.deleteBoard(boardId).subscribe(() => {
-            this.backendService.getAllBoards().subscribe();
-          });
-        }
-        this.isModalOpen = false;
-      });
-    }
-  }
-
-  addColumnModal() {
-    if (!this.isModalOpen) {
-      const dialogRef = this.creationModalOpen(AddColumnModalComponent);
-      dialogRef.afterClosed().subscribe(() => {
-        this.isModalOpen = false;
-      });
-    }
-  }
-
-  deleteColumnModal(columnId: string, boadrId: string) {
-    if (!this.isModalOpen) {
-      const dialogRef = this.confirmationModalOpen(
-        'Are you sure you want to delete this column?'
-      );
-
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.backendService.deleteColumn(columnId, boadrId).subscribe(() => {
-            this.backendService.getAllColumns(boadrId).subscribe();
-          });
-        }
-        this.isModalOpen = false;
-      });
-    }
-  }
+  deleteTaskModal() {}
 }

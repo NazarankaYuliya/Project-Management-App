@@ -18,7 +18,7 @@ import { BackendService } from 'src/app/services/backend.service';
 })
 export class AddColumnModalComponent implements OnInit {
   columnForm: FormGroup<any> = new FormGroup({});
-  boadrId: string = '';
+  boardId: string = '';
 
   @Output() columnCreated: EventEmitter<Column> = new EventEmitter<Column>();
 
@@ -34,7 +34,7 @@ export class AddColumnModalComponent implements OnInit {
     });
 
     this.backendService.getBoardId().subscribe((response) => {
-      this.boadrId = response;
+      this.boardId = response;
     });
   }
 
@@ -57,7 +57,7 @@ export class AddColumnModalComponent implements OnInit {
         title: this.columnForm.value.title,
         order: order,
       };
-      this.backendService.createColumn(this.boadrId, columnData).subscribe(
+      this.backendService.createColumn(this.boardId, columnData).subscribe(
         (responce) => {
           this.columnCreated.emit(responce);
           this.updateColumnsOrder();

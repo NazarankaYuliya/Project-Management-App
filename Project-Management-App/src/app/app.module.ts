@@ -22,6 +22,7 @@ import { BoardComponent } from './board/board.component';
 import { AddColumnModalComponent } from './modal/add-column-modal/add-column-modal.component';
 import { AddTaskModalComponent } from './modal/add-task-modal/add-task-modal.component';
 import { UpdateColumnsTitleModalComponent } from './modal/update-columns-title-modal/update-columns-title-modal.component';
+import { ColumnComponent } from './board/column/column.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { UpdateColumnsTitleModalComponent } from './modal/update-columns-title-m
     AddColumnModalComponent,
     AddTaskModalComponent,
     UpdateColumnsTitleModalComponent,
+    ColumnComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@
     <nav *ngIf="isAuthenticated(); else unauthenticatedNav">
         <ul>
             <li>
-                <a mat-raised-button color="primary" (click)="openCreateBoardDialog()"> Create New Board</a>
+                <a mat-raised-button color="primary" (click)="createBoard()"> Create New Board</a>
             </li>
 
             <li><a routerLink="/profile">Edit Profile</a></li>
@@ -11,7 +11,6 @@
     </nav>
     <ng-template #unauthenticatedNav>
         <nav>
-            <!--этот для невошедших -->
             <div class="sing-buttons">
                 <a routerLink="/login" class="button">Login</a>
                 <a routerLink="/signup" class="button">Sign Up</a>

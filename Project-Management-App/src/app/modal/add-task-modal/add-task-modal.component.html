@@ -1,1 +1,12 @@
-<p>add-task-modal works!</p>
+<h2>Create New Task</h2>
+<form [formGroup]="taskForm" (ngSubmit)="createTask()">
+    <div><label>Title</label>
+        <input matInput formControlName="title" required>
+    </div>
+    <div> <label>Description</label>
+        <input matInput formControlName="description" required>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit">Create</button>
+    <button mat-raised-button color="warn" type="button" (click)="closeModal()">Close</button>
+</form>

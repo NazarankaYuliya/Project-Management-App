@@ -12,6 +12,7 @@ import { ModalService } from '../services/modal.service';
 })
 export class MainRouteComponent implements OnInit {
   boards$!: Observable<Board[]>;
+  private isModalOpen = false;
 
   constructor(
     private backendService: BackendService,
@@ -33,6 +34,20 @@ export class MainRouteComponent implements OnInit {
   }
 
   deleteBoard(boardId: string): void {
-    this.modalService.deleteBoardModal(boardId);
+    if (!this.isModalOpen) {
+      this.isModalOpen = true;
+      const dialogRef = this.modalService.confirmationModalOpen(
+        'Are you sure you want to delete this board?'
+      );
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.backendService.deleteBoard(boardId).subscribe(() => {
+            this.backendService.getAllBoards().subscribe();
+          });
+          this.isModalOpen = false;
+        }
+      });
+    }
   }
 }
