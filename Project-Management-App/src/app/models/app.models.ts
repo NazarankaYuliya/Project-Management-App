@@ -1,3 +1,7 @@
+export interface LoginResponce {
+  token: string;
+}
+
 export interface User {
   name?: string;
   login: string;
@@ -12,7 +16,6 @@ export interface Board {
 }
 
 export interface UserResponse {
-  token: string;
   _id: string;
   name: string;
   login: string;

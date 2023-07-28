@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { BackendService } from '../services/backend.service';
-import { User } from '../models/app.models';
 
 @Component({
   selector: 'app-welcome-page',

@@ -9,45 +9,53 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Column, Task } from 'src/app/models/app.models';
+import { AuthService } from 'src/app/services/auth.service';
 import { BackendService } from 'src/app/services/backend.service';
 
 @Component({
-  selector: 'app-add-task-modal',
-  templateUrl: './add-task-modal.component.html',
-  styleUrls: ['./add-task-modal.component.scss'],
+  selector: 'app-update-task-modal',
+  templateUrl: './update-task-modal.component.html',
+  styleUrls: ['./update-task-modal.component.scss'],
 })
-export class AddTaskModalComponent implements OnInit {
+export class UpdateTaskModalComponent implements OnInit {
   boardId: string = '';
   columnId: string = '';
+  taskId: string = '';
+  taskTitle: string = '';
+  taskDescription: string = '';
   taskForm: FormGroup<any> = new FormGroup({});
 
-  @Output() taskCreated: EventEmitter<Task> = new EventEmitter<Task>();
+  @Output() taskUpdated: EventEmitter<Task> = new EventEmitter<Task>();
 
   constructor(
     private formBuilder: FormBuilder,
     private backendService: BackendService,
-    @Optional() private dialogRef: MatDialogRef<AddTaskModalComponent>,
+    private authService: AuthService,
+    @Optional() private dialogRef: MatDialogRef<UpdateTaskModalComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     if (data) {
       this.boardId = data.boardId;
       this.columnId = data.columnId;
+      this.taskId = data.taskId;
+      this.taskTitle = data.taskTitle;
+      this.taskDescription = data.taskDescription;
     }
   }
 
   ngOnInit(): void {
     this.taskForm = this.formBuilder.group({
-      title: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      title: [this.taskTitle, [Validators.required]],
+      description: [this.taskDescription, [Validators.required]],
     });
   }
 
-  createTask(): void {
+  updateTask(): void {
     if (this.taskForm.invalid) {
       return;
     }
 
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken();
 
     let order: number = 0;
 
@@ -56,15 +64,16 @@ export class AddTaskModalComponent implements OnInit {
         title: this.taskForm.value.title,
         order: order,
         description: this.taskForm.value.description,
+        columnId: this.columnId,
         userId: 2,
         users: [],
       };
 
       this.backendService
-        .createTask(this.boardId, this.columnId, TaskData)
+        .updateTask(this.boardId, this.columnId, this.taskId, TaskData)
         .subscribe(
           (responce) => {
-            this.taskCreated.emit(responce);
+            this.taskUpdated.emit(responce);
             this.dialogRef.close();
           },
           (error) => {

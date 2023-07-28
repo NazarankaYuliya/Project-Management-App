@@ -1,14 +1,8 @@
-import {
-  Component,
-  OnInit,
-  EventEmitter,
-  Output,
-  Optional,
-} from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Board } from 'src/app/models/app.models';
-import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-add-board-modal',
@@ -17,12 +11,11 @@ import { BackendService } from 'src/app/services/backend.service';
 })
 export class AddBoardModalComponent implements OnInit {
   boardForm: FormGroup<any> = new FormGroup({});
-
-  @Output() boardCreated: EventEmitter<Board> = new EventEmitter<Board>();
+  owner!: string | null;
 
   constructor(
+    private authService: AuthService,
     private formBuilder: FormBuilder,
-    private backendService: BackendService,
     @Optional() private dialogRef: MatDialogRef<AddBoardModalComponent>
   ) {}
 
@@ -32,34 +25,17 @@ export class AddBoardModalComponent implements OnInit {
     });
   }
 
-  createBoard(): void {
-    if (this.boardForm.invalid) {
-      return;
-    }
-
-    const token = localStorage.getItem('token');
-    const owner = localStorage.getItem('login');
-
-    if (token) {
-      const boardData: Board = {
-        title: this.boardForm.value.title,
-        owner: owner,
-        users: [],
-      };
-
-      this.backendService.createBoard(boardData).subscribe(
-        (response) => {
-          this.boardCreated.emit(response);
-          this.dialogRef.close();
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-    }
+  onSubmit(): void {
+    this.owner = this.authService.getLogin();
+    const boardData: Board = {
+      title: this.boardForm.value.title,
+      owner: this.owner,
+      users: [],
+    };
+    this.dialogRef.close({ submitted: true, data: boardData });
   }
 
-  closeModal(): void {
-    this.dialogRef.close();
+  onClose(): void {
+    this.dialogRef.close({ submitted: false });
   }
 }

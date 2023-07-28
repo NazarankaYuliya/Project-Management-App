@@ -1,0 +1,12 @@
+<h2>Update Task</h2>
+<form [formGroup]="taskForm" (ngSubmit)="updateTask()">
+    <div><label>Title</label>
+        <input matInput formControlName="title" required>
+    </div>
+    <div> <label>Description</label>
+        <input matInput formControlName="description" required>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit">Update</button>
+    <button mat-raised-button color="warn" type="button" (click)="closeModal()">Close</button>
+</form>

@@ -1,9 +1,6 @@
 <header>
     <nav *ngIf="isAuthenticated(); else unauthenticatedNav">
         <ul>
-            <li>
-                <a mat-raised-button color="primary" (click)="createBoard()"> Create New Board</a>
-            </li>
 
             <li><a routerLink="/profile">Edit Profile</a></li>
             <li><a (click)="logout()">Logout</a></li>

@@ -9,6 +9,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Column } from 'src/app/models/app.models';
+import { AuthService } from 'src/app/services/auth.service';
 import { BackendService } from 'src/app/services/backend.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class AddColumnModalComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private backendService: BackendService,
+    private authService: AuthService,
     @Optional() private dialogRef: MatDialogRef<AddColumnModalComponent>
   ) {}
 
@@ -43,7 +45,7 @@ export class AddColumnModalComponent implements OnInit {
       return;
     }
 
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken();
     let order: number = 0;
 
     if (token) {

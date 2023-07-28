@@ -1,0 +1,7 @@
+<h2>Update Column</h2>
+<form [formGroup]="columnForm" (ngSubmit)="updateColumn()">
+    <label>Title</label>
+    <input matInput formControlName="title" required>
+    <button mat-raised-button color="primary" type="submit">Update</button>
+    <button mat-raised-button color="warn" type="button" (click)="closeModal()">Close</button>
+</form>

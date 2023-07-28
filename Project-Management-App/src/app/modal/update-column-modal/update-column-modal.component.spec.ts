@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateColumnsTitleModalComponent } from './update-columns-title-modal.component';
+import { UpdateColumnModalComponent } from './update-column-modal.component';
 
 describe('UpdateColumnsTitleModalComponent', () => {
-  let component: UpdateColumnsTitleModalComponent;
-  let fixture: ComponentFixture<UpdateColumnsTitleModalComponent>;
+  let component: UpdateColumnModalComponent;
+  let fixture: ComponentFixture<UpdateColumnModalComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [UpdateColumnsTitleModalComponent]
+      declarations: [UpdateColumnModalComponent],
     });
-    fixture = TestBed.createComponent(UpdateColumnsTitleModalComponent);
+    fixture = TestBed.createComponent(UpdateColumnModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

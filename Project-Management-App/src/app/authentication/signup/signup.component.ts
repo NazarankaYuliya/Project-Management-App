@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -8,14 +9,17 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent {
-  form: FormGroup;
+export class SignupComponent implements OnInit, OnDestroy {
+  form!: FormGroup;
+  aSub!: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       login: ['', [Validators.required, Validators.minLength(2)]],
@@ -30,24 +34,20 @@ export class SignupComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.aSub) {
+      this.aSub.unsubscribe();
+    }
+  }
+
   signup(form: FormGroup) {
-    this.authService.signup(form.value).subscribe(
-      (responce) => {
+    this.aSub = this.authService.signup(form.value).subscribe(
+      () => {
         alert('You are successfully singned up!');
+        this.router.navigate(['/login']);
       },
       (error) => {
-        if (error.error.statusCode === 409) {
-          error.error.message =
-            'An account with this name or login already exists..';
-          this.router.navigate(['/login']);
-        } else if (error.error.statusCode === 400) {
-          error.error.message =
-            'Invalid input data. Please check your information and try again.';
-        } else {
-          error.error.message = 'An error occurred. Please try again later.';
-        }
-
-        alert(error.error.message);
+        alert(error);
       }
     );
   }

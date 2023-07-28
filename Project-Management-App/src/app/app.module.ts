@@ -21,8 +21,10 @@ import { ProfileComponent } from './authentication/profile/profile.component';
 import { BoardComponent } from './board/board.component';
 import { AddColumnModalComponent } from './modal/add-column-modal/add-column-modal.component';
 import { AddTaskModalComponent } from './modal/add-task-modal/add-task-modal.component';
-import { UpdateColumnsTitleModalComponent } from './modal/update-columns-title-modal/update-columns-title-modal.component';
+import { UpdateColumnModalComponent } from './modal/update-column-modal/update-column-modal.component';
 import { ColumnComponent } from './board/column/column.component';
+import { TaskComponent } from './board/task/task.component';
+import { UpdateTaskModalComponent } from './modal/update-task-modal/update-task-modal.component';
 
 @NgModule({
   declarations: [
@@ -39,8 +41,10 @@ import { ColumnComponent } from './board/column/column.component';
     BoardComponent,
     AddColumnModalComponent,
     AddTaskModalComponent,
-    UpdateColumnsTitleModalComponent,
+    UpdateColumnModalComponent,
     ColumnComponent,
+    TaskComponent,
+    UpdateTaskModalComponent,
   ],
   imports: [
     BrowserModule,

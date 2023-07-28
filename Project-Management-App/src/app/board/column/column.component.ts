@@ -1,6 +1,8 @@
-import { Component, Input, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AddColumnModalComponent } from 'src/app/modal/add-column-modal/add-column-modal.component';
 import { AddTaskModalComponent } from 'src/app/modal/add-task-modal/add-task-modal.component';
+import { UpdateColumnModalComponent } from 'src/app/modal/update-column-modal/update-column-modal.component';
 import { Column, Task } from 'src/app/models/app.models';
 import { BackendService } from 'src/app/services/backend.service';
 import { ModalService } from 'src/app/services/modal.service';
@@ -11,10 +13,10 @@ import { ModalService } from 'src/app/services/modal.service';
   styleUrls: ['./column.component.scss'],
 })
 export class ColumnComponent implements OnInit {
-  @Input() column!: Column;
   @Input() boardId!: string | null;
+
+  columns$!: Observable<Column[]>;
   private isModalOpen = false;
-  public tasks$!: Observable<Task[]>;
 
   constructor(
     private backendService: BackendService,
@@ -22,16 +24,45 @@ export class ColumnComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.boardId && this.column._id) {
-      this.tasks$ = this.backendService.tasks;
-
-      this.backendService
-        .getAllTasks(this.boardId, this.column._id)
-        .subscribe();
+    if (this.boardId) {
+      this.columns$ = this.backendService.getAllColumns(this.boardId);
     }
   }
 
-  deleteColumn(columnsId: string, boadrId: string) {
+  addColumn() {
+    if (!this.isModalOpen) {
+      this.isModalOpen = true;
+      const dialogRef = this.modalService.creationModalOpen(
+        AddColumnModalComponent
+      );
+      dialogRef.afterClosed().subscribe(() => {
+        this.isModalOpen = false;
+      });
+    }
+  }
+
+  updateColumn(columnId: string, columnTitle: string, columnOrder: number) {
+    if (!this.isModalOpen) {
+      this.isModalOpen = true;
+      const dialogRef = this.modalService.creationModalOpen(
+        UpdateColumnModalComponent,
+        {
+          boardId: this.boardId,
+          columnId: columnId,
+          columnTitle: columnTitle,
+          columnOrder: columnOrder,
+        }
+      );
+      dialogRef.afterClosed().subscribe(() => {
+        if (this.boardId) {
+          this.columns$ = this.backendService.getAllColumns(this.boardId);
+        }
+        this.isModalOpen = false;
+      });
+    }
+  }
+
+  deleteColumn(columnId: string, boardId: string) {
     if (!this.isModalOpen) {
       this.isModalOpen = true;
       const dialogRef = this.modalService.confirmationModalOpen(
@@ -40,23 +71,10 @@ export class ColumnComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          this.backendService.deleteColumn(columnsId, boadrId).subscribe(() => {
-            this.backendService.getAllColumns(boadrId).subscribe();
+          this.backendService.deleteColumn(columnId, boardId).subscribe(() => {
+            this.columns$ = this.backendService.columns$;
           });
         }
-        this.isModalOpen = false;
-      });
-    }
-  }
-
-  addTask() {
-    if (!this.isModalOpen) {
-      this.isModalOpen = true;
-      const dialogRef = this.modalService.creationModalOpen(
-        AddTaskModalComponent,
-        { boardId: this.boardId, columnId: this.column._id }
-      );
-      dialogRef.afterClosed().subscribe(() => {
         this.isModalOpen = false;
       });
     }

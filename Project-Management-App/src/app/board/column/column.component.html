@@ -1,14 +1,11 @@
-<div class="column">
-    <div class="column-header">
-        {{ column.order }} {{ column.title }}
-        <button *ngIf="column._id && boardId" (click)="deleteColumn(column._id, boardId)">Delete Column</button>
-    </div>
-    <div class="tasks-container">
-        <div class="task" *ngFor="let task of(tasks$ | async)">
-            {{ task.title }}
-            {{ task.description }}
+<button mat-button (click)=" addColumn()">Create Column</button>
+<div class="columns-container">
+    <div *ngFor="let column of columns$ | async" class="column">
+        <div class="column-header">
+            <h4 *ngIf="column._id && column.title &&  column.order"
+                (click)="updateColumn(column._id, column.title, column.order)">{{column.title}}</h4>
+            <button *ngIf=" column._id &&boardId" (click)="deleteColumn(column._id, boardId)">Delete Column</button>
         </div>
+        <app-task *ngIf="boardId && column._id" [boardId]="boardId" [columnId]="column._id"></app-task>
     </div>
-    <button mat-button *ngIf="column._id && boardId" (click)="addTask()">Add Task</button>
-
 </div>

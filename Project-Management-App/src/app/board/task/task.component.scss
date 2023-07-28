@@ -1,0 +1,16 @@
+.tasks-container {
+  min-height: 100px;
+}
+
+.task {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(0, 0, 0);
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.task-content {
+  flex: 1;
+  cursor: pointer;
+}

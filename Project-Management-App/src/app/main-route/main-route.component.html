@@ -2,6 +2,9 @@
 
 <div>
     <h2>Your Boards</h2>
+    <button>
+        <a mat-raised-button color="primary" (click)="createBoard()"> Create New Board</a>
+    </button>
     <ul class="boards">
         <li *ngFor="let board of (boards$ | async)">
             {{ board.title }} - {{ board.owner }}
