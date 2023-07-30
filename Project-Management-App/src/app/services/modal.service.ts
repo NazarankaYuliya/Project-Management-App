@@ -12,6 +12,9 @@ export class ModalService {
     message: string
   ): MatDialogRef<ConfirmationModalComponent, boolean> {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: '400px',
+      height: '200px',
+      disableClose: true,
       data: { message: message },
     });
     return dialogRef;

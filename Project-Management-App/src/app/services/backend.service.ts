@@ -1,41 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { BehaviorSubject, forkJoin, Observable, of, throwError } from 'rxjs';
-import { Board, Column, Task, User } from '../models/app.models';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { Board, Column, Task } from '../models/app.models';
 import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BackendService {
-  private baseUrl = 'https://final-task-backend.up.railway.app';
+  private baseUrl = 'https://final-task-backend-production-c754.up.railway.app';
 
   private token: string | null = null;
   private login: string | null = null;
 
-  boardId: BehaviorSubject<string> = new BehaviorSubject<string>('');
-
   boards: BehaviorSubject<Board[]> = new BehaviorSubject<Board[]>([]);
-  columns: BehaviorSubject<Column[]> = new BehaviorSubject<Column[]>([]);
-  tasks: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   boards$: Observable<Board[]> = this.boards.asObservable();
-  boardId$: Observable<string> = this.boardId.asObservable();
-  columns$: Observable<Column[]> = this.columns.asObservable();
-  tasks$: Observable<any[]> = this.tasks.asObservable();
 
   constructor(private http: HttpClient, private authService: AuthService) {
     this.token = this.authService.getToken();
     this.login = this.authService.getLogin();
-  }
-
-  setBoardId(boardId: string) {
-    this.boardId.next(boardId);
-  }
-
-  getBoardId(): Observable<string> {
-    return this.boardId.asObservable();
+    this.authService.isLoggedIn().subscribe((loggedIn) => {
+      if (loggedIn) {
+        this.token = this.authService.getToken();
+        this.login = this.authService.getLogin();
+      }
+    });
   }
 
   private getHeaders(): HttpHeaders {
@@ -53,7 +44,10 @@ export class BackendService {
     const headers = this.getHeaders();
     return this.http.get<Board[]>(`${this.baseUrl}/boards`, { headers }).pipe(
       tap((boards: Board[]) => {
-        this.boards.next(boards);
+        const usersBoards = boards.filter(
+          (board) => board.owner === this.login
+        );
+        this.boards.next(usersBoards);
       })
     );
   }
@@ -104,16 +98,12 @@ export class BackendService {
     }
 
     const headers = this.getHeaders();
-    return this.http
-      .get<Column[]>(`${this.baseUrl}/boards/${boardId}/columns`, {
+    return this.http.get<Column[]>(
+      `${this.baseUrl}/boards/${boardId}/columns`,
+      {
         headers,
-      })
-      .pipe(
-        tap((columns: Column[]) => {
-          this.columns.next(columns);
-          this.updateColumnsOrder();
-        })
-      );
+      }
+    );
   }
 
   createColumn(boardId: string, newColumn: Column): Observable<Column> {
@@ -122,52 +112,34 @@ export class BackendService {
     }
 
     const headers = this.getHeaders();
-    return this.http
-      .post<Column>(`${this.baseUrl}/boards/${boardId}/columns`, newColumn, {
+    return this.http.post<Column>(
+      `${this.baseUrl}/boards/${boardId}/columns`,
+      newColumn,
+      {
         headers,
-      })
-      .pipe(
-        tap((createdColumn: Column) => {
-          const currentColumn = this.columns.getValue();
-
-          currentColumn.push(createdColumn);
-
-          this.columns.next(currentColumn);
-        })
-      );
+      }
+    );
   }
 
-  deleteColumn(columnId: string, boadrId: string): Observable<any> {
+  deleteColumn(boadrId: string, columnId: string): Observable<void> {
     if (!this.token) {
       return throwError('Token not available');
     }
 
     const headers = this.getHeaders();
-    return this.http
-      .delete<any>(`${this.baseUrl}/boards/${boadrId}/columns/${columnId}`, {
+    return this.http.delete<void>(
+      `${this.baseUrl}/boards/${boadrId}/columns/${columnId}`,
+      {
         headers,
-      })
-      .pipe(
-        tap(() => {
-          const currentColumns = this.columns.getValue();
-          const updatedColumns = currentColumns.filter(
-            (column) => column._id !== columnId
-          );
-          this.columns.next(updatedColumns);
-        })
-      );
+      }
+    );
   }
 
-  updateColumnsOrder(): void {
-    const currentColumns = this.columns.getValue();
-
-    currentColumns.forEach((column, index) => {
-      column.order = index + 1;
-    });
-    this.columns.next(currentColumns);
-  }
-
-  updateColumn(boardId: string, columnId: string, updateData: any) {
+  updateColumn(
+    boardId: string,
+    columnId: string,
+    updateData: any
+  ): Observable<Column> {
     if (!this.token) {
       return throwError('Token not available');
     }
@@ -182,47 +154,36 @@ export class BackendService {
     );
   }
 
-  getAllTasks(boardId: string, columnsId: string): Observable<any[]> {
+  getAllTasks(boardId: string, columnsId: string): Observable<Task[]> {
     if (!this.token) {
       return throwError('Token or login not available');
     }
 
     const headers = this.getHeaders();
-    return this.http
-      .get<any[]>(
-        `${this.baseUrl}/boards/${boardId}/columns/${columnsId}/tasks`,
-        {
-          headers,
-        }
-      )
-      .pipe(
-        tap((tasks: Task[]) => {
-          this.tasks.next(tasks);
-        })
-      );
+    return this.http.get<Task[]>(
+      `${this.baseUrl}/boards/${boardId}/columns/${columnsId}/tasks`,
+      {
+        headers,
+      }
+    );
   }
 
-  createTask(boardId: string, columnId: string, newTask: any): Observable<any> {
+  createTask(
+    boardId: string,
+    columnId: string,
+    newTask: Task
+  ): Observable<Task> {
     if (!this.token) {
-      return throwError('Token not available');
+      return throwError('Token or login not available');
     }
-
     const headers = this.getHeaders();
-
-    return this.http
-      .post<any>(
-        `${this.baseUrl}/boards/${boardId}/columns/${columnId}/tasks`,
-        newTask,
-        { headers }
-      )
-      .pipe(
-        tap((createdTask: Task) => {
-          const currentTasks = this.tasks.getValue();
-
-          const updatedTasks = [...currentTasks, createdTask];
-          this.tasks.next(updatedTasks);
-        })
-      );
+    return this.http.post<Task>(
+      `${this.baseUrl}/boards/${boardId}/columns/${columnId}/tasks`,
+      newTask,
+      {
+        headers,
+      }
+    );
   }
 
   updateTask(
@@ -244,13 +205,17 @@ export class BackendService {
     );
   }
 
-  deleteTask(boadrId: string, columnId: string, taskId: string) {
+  deleteTask(
+    boadrId: string,
+    columnId: string,
+    taskId: string
+  ): Observable<void> {
     if (!this.token) {
       return throwError('Token not available');
     }
 
     const headers = this.getHeaders();
-    return this.http.delete<any>(
+    return this.http.delete<void>(
       `${this.baseUrl}/boards/${boadrId}/columns/${columnId}/tasks/${taskId}`,
       {
         headers,

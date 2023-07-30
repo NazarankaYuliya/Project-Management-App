@@ -1,5 +1,5 @@
 mat-dialog-content {
-  color: #444; /* Темно-серый цвет текста контента модального окна */
+  color: #444;
 }
 
 mat-dialog-actions {
@@ -9,8 +9,8 @@ mat-dialog-actions {
 }
 
 mat-dialog-actions button {
-  background-color: #999; /* Серая кнопка в модальном окне */
-  color: #fff; /* Белый текст на кнопке */
+  background-color: #999;
+  color: #fff;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -22,5 +22,5 @@ mat-dialog-actions button {
 }
 
 mat-dialog-actions button:hover {
-  background-color: #666; /* Темно-серая кнопка в модальном окне при наведении */
+  background-color: #666;
 }

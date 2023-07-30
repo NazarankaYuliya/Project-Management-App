@@ -40,6 +40,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login(form: FormGroup) {
+    if (this.form.invalid) {
+      return;
+    }
+
     this.aSub = this.authService.signin(form.value).subscribe(
       () => {
         this.router.navigate(['/main-route']);

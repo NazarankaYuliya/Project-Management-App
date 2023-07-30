@@ -174,8 +174,6 @@ export class ColumnComponent implements OnInit {
       );
 
       const targetColumnId = this.column._id;
-
-      console.log(targetColumnId);
     }
   }
 

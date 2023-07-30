@@ -41,6 +41,10 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   signup(form: FormGroup) {
+    if (this.form.invalid) {
+      return;
+    }
+
     this.aSub = this.authService.signup(form.value).subscribe(
       () => {
         alert('You are successfully singned up!');

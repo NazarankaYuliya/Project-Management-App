@@ -5,18 +5,21 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { LoginResponce, UserResponse, User } from '../models/app.models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'https://final-task-backend.up.railway.app';
+  private baseUrl = 'https://final-task-backend-production-c754.up.railway.app';
 
   private token: string | null = null;
   private login: string | null = null;
   private userId: null | string = null;
+
+  private loggedInSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -38,26 +41,18 @@ export class AuthService {
           return this.handleError(error);
         }),
         tap(({ token }) => {
-          this.setToken(token);
-          this.setLogin(user.login);
+          this.token = token;
+          this.login = user.login;
           localStorage.setItem('token', token);
           localStorage.setItem('login', user.login);
-
+          this.loggedInSubject.next(true);
           this.getUsers().subscribe();
         })
       );
   }
 
-  setToken(token: string | null) {
-    this.token = token;
-  }
-
-  setLogin(login: string | null) {
-    this.login = login;
-  }
-
-  setUserId(userId: string | null) {
-    this.userId = userId;
+  isLoggedIn(): Observable<boolean> {
+    return this.loggedInSubject.asObservable();
   }
 
   getToken() {
@@ -70,6 +65,10 @@ export class AuthService {
 
   getUserId() {
     return localStorage.getItem('userId');
+  }
+
+  getUserName() {
+    return localStorage.getItem('userName');
   }
 
   isAuthenticated(): boolean {
@@ -88,8 +87,9 @@ export class AuthService {
   }
 
   logout(): void {
-    this.setToken(null);
-    this.setLogin(null);
+    this.token = null;
+    this.login = null;
+    this.userId = null;
     localStorage.clear();
 
     this.router.navigate(['/welcome']);
@@ -126,16 +126,17 @@ export class AuthService {
   }
 
   getUsers() {
+    const token = this.getToken();
     const headers = new HttpHeaders({
       accept: 'application/json',
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${token}`,
     });
     return this.http.get<any[]>(`${this.baseUrl}/users`, { headers }).pipe(
       tap((users) => {
         users.forEach((user) => {
           if (user.login === this.login) {
-            this.setUserId(user._id);
             localStorage.setItem('userId', user._id);
+            localStorage.setItem('userName', user.name);
           }
         });
       })
@@ -143,12 +144,28 @@ export class AuthService {
   }
 
   updateUser(user: User) {
+    const token = this.getToken();
+    const userId = this.getUserId();
+
     const headers = new HttpHeaders({
       accept: 'application/json',
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${token}`,
     });
-    return this.http
-      .put(`${this.baseUrl}/users/${this.userId}`, user, { headers })
-      .subscribe();
+    return this.http.put(`${this.baseUrl}/users/${userId}`, user, {
+      headers,
+    });
+  }
+
+  deleteUser() {
+    const token = this.getToken();
+    const userId = this.getUserId();
+
+    const headers = new HttpHeaders({
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.delete(`${this.baseUrl}/users/${userId}`, {
+      headers,
+    });
   }
 }

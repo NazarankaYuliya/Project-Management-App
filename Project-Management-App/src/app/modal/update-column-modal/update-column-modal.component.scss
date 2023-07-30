@@ -1,6 +1,5 @@
-/* Стили для модального окна "Update Column" */
 h2 {
-  color: #444; /* Темно-серый цвет заголовка */
+  color: #444;
   margin-bottom: 10px;
 }
 
@@ -11,18 +10,18 @@ form {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #f2f2f2; /* Светло-серый фон формы */
+  background-color: #f2f2f2;
 }
 
 label {
-  color: #444; /* Темно-серый цвет текста метки */
+  color: #444;
 }
 
 input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #fff; /* Белый фон для ввода */
+  background-color: #fff;
 }
 
 button {
@@ -37,19 +36,19 @@ button {
 }
 
 button[type="submit"] {
-  background-color: #999; /* Серая кнопка "Update" */
-  color: #fff; /* Белый текст на кнопке */
+  background-color: #999;
+  color: #fff;
 }
 
 button[type="submit"]:hover {
-  background-color: #666; /* Темно-серая кнопка "Update" при наведении */
+  background-color: #666;
 }
 
 button[type="button"] {
-  background-color: #999; /* Серая кнопка "Close" */
-  color: #fff; /* Белый текст на кнопке */
+  background-color: #999;
+  color: #fff;
 }
 
 button[type="button"]:hover {
-  background-color: #666; /* Темно-серая кнопка "Close" при наведении */
+  background-color: #666;
 }

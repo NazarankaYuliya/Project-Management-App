@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AddTaskModalComponent } from 'src/app/modal/add-task-modal/add-task-modal.component';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UpdateTaskModalComponent } from 'src/app/modal/update-task-modal/update-task-modal.component';
 import { Task } from 'src/app/models/app.models';
+import { AuthService } from 'src/app/services/auth.service';
 import { BackendService } from 'src/app/services/backend.service';
 import { ModalService } from 'src/app/services/modal.service';
 
@@ -12,72 +11,25 @@ import { ModalService } from 'src/app/services/modal.service';
   styleUrls: ['./task.component.scss'],
 })
 export class TaskComponent implements OnInit {
+  @Input() task!: Task;
   @Input() boardId!: string | null;
   @Input() columnId!: string | null;
-  tasks$!: Observable<Task[]>;
+
   private isModalOpen = false;
+
+  @Output() taskDeleted: EventEmitter<Task> = new EventEmitter<Task>();
+
+  @Output() taskUpdated: EventEmitter<Task> = new EventEmitter<Task>();
 
   constructor(
     private backendService: BackendService,
+    private authService: AuthService,
     private modalService: ModalService
   ) {}
 
-  ngOnInit(): void {
-    if (this.boardId && this.columnId) {
-      this.tasks$ = this.backendService.getAllTasks(
-        this.boardId,
-        this.columnId
-      );
-    }
-  }
+  ngOnInit(): void {}
 
-  addTask() {
-    if (!this.isModalOpen) {
-      this.isModalOpen = true;
-      const dialogRef = this.modalService.creationModalOpen(
-        AddTaskModalComponent,
-        { boardId: this.boardId, columnId: this.columnId }
-      );
-      dialogRef.afterClosed().subscribe(() => {
-        if (this.boardId && this.columnId) {
-          this.tasks$ = this.backendService.getAllTasks(
-            this.boardId,
-            this.columnId
-          );
-        }
-
-        this.isModalOpen = false;
-      });
-    }
-  }
-
-  updateTask(taskId: string, taskTitle: string, taskDescription: string) {
-    if (!this.isModalOpen) {
-      this.isModalOpen = true;
-      const dialogRef = this.modalService.creationModalOpen(
-        UpdateTaskModalComponent,
-        {
-          boardId: this.boardId,
-          columnId: this.columnId,
-          taskId: taskId,
-          taskTitle: taskTitle,
-          taskDescription: taskDescription,
-        }
-      );
-      dialogRef.afterClosed().subscribe(() => {
-        if (this.boardId && this.columnId) {
-          this.tasks$ = this.backendService.getAllTasks(
-            this.boardId,
-            this.columnId
-          );
-        }
-
-        this.isModalOpen = false;
-      });
-    }
-  }
-
-  deleteTask(boardId: string, columnId: string, taskId: string) {
+  deleteTask() {
     if (!this.isModalOpen) {
       this.isModalOpen = true;
       const dialogRef = this.modalService.confirmationModalOpen(
@@ -85,14 +37,56 @@ export class TaskComponent implements OnInit {
       );
 
       dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
+        this.isModalOpen = false;
+        if (result && this.boardId && this.columnId && this.task._id) {
           this.backendService
-            .deleteTask(boardId, columnId, taskId)
+            .deleteTask(this.boardId, this.columnId, this.task._id)
             .subscribe(() => {
-              this.tasks$ = this.backendService.getAllTasks(boardId, columnId);
+              this.taskDeleted.emit(this.task);
             });
         }
+      });
+    }
+  }
+
+  updateTask() {
+    if (!this.isModalOpen) {
+      this.isModalOpen = true;
+      const dialogRef = this.modalService.creationModalOpen(
+        UpdateTaskModalComponent
+      );
+
+      dialogRef.afterClosed().subscribe((result) => {
         this.isModalOpen = false;
+
+        if (result && result.submitted && this.columnId) {
+          const updatedTask: Task = {
+            title: result.data.title,
+            order: this.task.order,
+            description: result.data.description,
+            columnId: this.task.columnId,
+            userId: this.task.userId,
+            users: this.task.users,
+          };
+          if (this.boardId && this.task._id) {
+            this.backendService
+              .updateTask(
+                this.boardId,
+                this.columnId,
+                this.task._id,
+                updatedTask
+              )
+              .subscribe(
+                (response) => {
+                  this.taskUpdated.emit(response);
+                  dialogRef.close();
+                },
+                (error) => {
+                  console.error(error);
+                }
+              );
+          }
+        }
       });
     }
   }

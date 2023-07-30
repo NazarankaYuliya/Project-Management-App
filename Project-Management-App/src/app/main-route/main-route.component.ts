@@ -1,12 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { BackendService } from '../services/backend.service';
 import { Board } from '../models/app.models';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ModalService } from '../services/modal.service';
-import { AuthService } from '../services/auth.service';
 import { AddBoardModalComponent } from '../modal/add-board-modal/add-board-modal.component';
-import { response } from 'express';
 
 @Component({
   selector: 'app-main-route',
@@ -18,11 +16,9 @@ export class MainRouteComponent implements OnInit {
   private isModalOpen = false;
 
   @Output() boardCreated: EventEmitter<Board> = new EventEmitter<Board>();
-  dilogRef: any;
 
   constructor(
     private backendService: BackendService,
-    private authService: AuthService,
     public dialog: MatDialog,
     private modalService: ModalService
   ) {}
@@ -46,7 +42,7 @@ export class MainRouteComponent implements OnInit {
           this.backendService.createBoard(result.data).subscribe(
             (responce) => {
               this.boardCreated.emit(responce);
-              this.dilogRef.close();
+              dialogRef.close();
             },
             (error) => {
               console.error(error);
@@ -69,8 +65,8 @@ export class MainRouteComponent implements OnInit {
           this.backendService.deleteBoard(boardId).subscribe(() => {
             this.backendService.getAllBoards().subscribe();
           });
-          this.isModalOpen = false;
         }
+        this.isModalOpen = false;
       });
     }
   }

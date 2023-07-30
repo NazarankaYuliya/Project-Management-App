@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -25,6 +24,8 @@ import { UpdateColumnModalComponent } from './modal/update-column-modal/update-c
 import { ColumnComponent } from './board/column/column.component';
 import { TaskComponent } from './board/task/task.component';
 import { UpdateTaskModalComponent } from './modal/update-task-modal/update-task-modal.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -53,10 +54,11 @@ import { UpdateTaskModalComponent } from './modal/update-task-modal/update-task-
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    DragDropModule,
     MatDialogModule,
   ],
 
-  providers: [BackendService, ModalService],
+  providers: [BackendService, ModalService, AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

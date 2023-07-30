@@ -26,6 +26,9 @@ export class AddBoardModalComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.boardForm.invalid) {
+      return;
+    }
     this.owner = this.authService.getLogin();
     const boardData: Board = {
       title: this.boardForm.value.title,
