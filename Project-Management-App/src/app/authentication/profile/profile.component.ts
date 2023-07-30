@@ -27,9 +27,16 @@ export class ProfileComponent implements OnInit {
     this.userLogin = this.authService.getLogin();
     this.userName = this.authService.getUserName();
     this.profileForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.minLength(2)]],
       login: [this.userLogin, [Validators.required]],
-      password: ['', [Validators.required]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(20),
+        ],
+      ],
     });
   }
 
