@@ -1,0 +1,26 @@
+mat-dialog-content {
+  color: #444; /* Темно-серый цвет текста контента модального окна */
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+mat-dialog-actions button {
+  background-color: #999; /* Серая кнопка в модальном окне */
+  color: #fff; /* Белый текст на кнопке */
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+mat-dialog-actions button:hover {
+  background-color: #666; /* Темно-серая кнопка в модальном окне при наведении */
+}

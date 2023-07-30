@@ -1,39 +1,82 @@
 header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  padding: 30px;
+  padding: 20px;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  column-gap: 20px;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  column-gap: 20px;
-}
-
-li {
-  padding: 10px;
-  border: 1px solid #008000;
-}
-
-a {
-  text-decoration: none;
-}
-
+.profile-buttons,
 .sing-buttons {
   display: flex;
-  column-gap: 20px;
+  gap: 10px;
 }
 
-.button {
-  padding: 10px;
-  border: 1px solid #000000;
+.header-title a {
+  text-decoration: none;
+  color: #999;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+nav a,
+nav button {
+  font-size: 18px;
+  padding: 8px 12px;
+  background-color: #999;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+nav a:hover {
+  background-color: #666;
+}
+
+.language {
+  font-size: 18px;
+  padding: 8px 12px;
+  background-color: #999;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.language option {
+  background-color: #999;
+  color: #fff;
+}
+
+.language:hover {
+  background-color: #666;
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    flex-direction: column;
+    row-gap: 10px;
+    align-items: center;
+  }
+
+  .profile-buttons,
+  .sing-buttons {
+    align-items: center;
+  }
+
+  a,
+  button,
+  .language {
+    font-size: 16px;
+    padding: 6px 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  nav a,
+  nav button,
+  .language {
+    font-size: 14px;
+    padding: 5px 8px;
+  }
 }

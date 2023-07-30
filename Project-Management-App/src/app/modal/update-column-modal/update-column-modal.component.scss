@@ -1,0 +1,55 @@
+/* Стили для модального окна "Update Column" */
+h2 {
+  color: #444; /* Темно-серый цвет заголовка */
+  margin-bottom: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f2f2f2; /* Светло-серый фон формы */
+}
+
+label {
+  color: #444; /* Темно-серый цвет текста метки */
+}
+
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff; /* Белый фон для ввода */
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button[type="submit"] {
+  background-color: #999; /* Серая кнопка "Update" */
+  color: #fff; /* Белый текст на кнопке */
+}
+
+button[type="submit"]:hover {
+  background-color: #666; /* Темно-серая кнопка "Update" при наведении */
+}
+
+button[type="button"] {
+  background-color: #999; /* Серая кнопка "Close" */
+  color: #fff; /* Белый текст на кнопке */
+}
+
+button[type="button"]:hover {
+  background-color: #666; /* Темно-серая кнопка "Close" при наведении */
+}
