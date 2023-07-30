@@ -1,11 +1,5 @@
-<div class="tasks-container">
-    <button mat-button (click)="addTask()">Add Task</button>
-    <div class="task" *ngFor="let task of (tasks$ | async)">
-        <h4 *ngIf="task._id && task.title && task.description"
-            (click)="updateTask(task._id, task.title, task.description)">Task: {{task.title}}</h4>
-        <p> Description:{{task.description}}</p>
-        <button *ngIf="columnId &&boardId && task._id" (click)="deleteTask(boardId,columnId, task._id)">Delete
-            Task</button>
-    </div>
-
+<div class="task" (click)="updateTask()">
+    <h4>{{task.title | uppercase}}</h4>
+    <p> Description: {{task.description}}</p>
+    <button (click)="deleteTask()">Delete Task</button>
 </div>

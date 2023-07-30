@@ -1,5 +1,5 @@
-<h2>Create New Board</h2>
 <form [formGroup]="boardForm" (ngSubmit)="onSubmit()">
+    <h2>Create New Board</h2>
     <label>Title</label>
     <input matInput formControlName="title" required>
     <button mat-raised-button color="primary" type="submit">Create</button>
