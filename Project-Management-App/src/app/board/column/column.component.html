@@ -1,11 +1,19 @@
-<button mat-button (click)=" addColumn()">Create Column</button>
-<div class="columns-container">
-    <div *ngFor="let column of columns$ | async" class="column">
+<div class="wrapper">
+    <div class="column" cdkDropList *ngIf="this.column._id" [cdkDropListData]="tasks"
+        (cdkDropListDropped)="drop($event)">
         <div class="column-header">
-            <h4 *ngIf="column._id && column.title &&  column.order"
-                (click)="updateColumn(column._id, column.title, column.order)">{{column.title}}</h4>
-            <button *ngIf=" column._id &&boardId" (click)="deleteColumn(column._id, boardId)">Delete Column</button>
+            <h4 (click)="updateColumn()">{{column.title | uppercase}}
+            </h4>
+            <button class="delete-button" (click)="deleteColumn()">Delete Column</button>
         </div>
-        <app-task *ngIf="boardId && column._id" [boardId]="boardId" [columnId]="column._id"></app-task>
+
+
+        <div cdkDropList class="tasks-container" (cdkDropListDropped)="drop($event)">
+            <button mat-button (click)="addTask()">Add Task</button>
+
+            <app-task class="task" *ngFor="let task of tasks" [task]="task" [boardId]="boardId ? boardId : null"
+                [columnId]="column._id ? column._id : null" (taskDeleted)="handleTaskDeleted($event)"
+                (taskUpdated)="handleTaskUpdated($event)" cdkDrag [cdkDragData]="task"></app-task>
+        </div>
     </div>
 </div>

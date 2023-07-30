@@ -1,10 +1,22 @@
-<div class="board">
-    <div class="board-title">
-        <h2>{{boardTitle | uppercase}}</h2>
+<div class="wrapper">
+    <div class="board">
+        <div class="board-header">
+            <div class="board-title">
+                <h2>{{boardTitle | uppercase}}</h2>
+            </div>
+            <div class="btn-container">
+                <button routerLink="/main-route">View Boards</button>
+                <button (click)="createColumn()">Create Column</button>
+            </div>
+        </div>
+
+        <div class="columns-container" cdkDropListGroup>
+            <div class="columns" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+                <app-column *ngFor='let column of columns' [column]="column" [boardId]="boardId"
+                    (columnDeleted)="handleColumnDeleted($event)" (columnUpdated)="handleColumnUpdated($event)" cdkDrag>
+                </app-column>
+
+            </div>
+        </div>
     </div>
-
-
-    <app-column [boardId]="boardId"></app-column>
-
-
 </div>
