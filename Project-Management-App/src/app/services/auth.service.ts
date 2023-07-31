@@ -76,6 +76,15 @@ export class AuthService {
     return !!token;
   }
 
+  logout(): void {
+    this.token = null;
+    this.login = null;
+    this.userId = null;
+    localStorage.clear();
+
+    this.router.navigate(['/welcome']);
+  }
+
   isTokenExpired() {
     const token = this.getToken();
     if (!token) return true;
@@ -84,15 +93,6 @@ export class AuthService {
     if (!expirationDate) return true;
 
     return expirationDate <= new Date();
-  }
-
-  logout(): void {
-    this.token = null;
-    this.login = null;
-    this.userId = null;
-    localStorage.clear();
-
-    this.router.navigate(['/welcome']);
   }
 
   getTokenExpirationDate(token: string): Date | null {
@@ -107,7 +107,7 @@ export class AuthService {
     }
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An error occurred. Please try again later.';
 
     if (error.error && error.error.message) {

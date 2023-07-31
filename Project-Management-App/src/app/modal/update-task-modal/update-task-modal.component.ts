@@ -1,6 +1,6 @@
-import { Component, OnInit, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-update-task-modal',
@@ -12,13 +12,14 @@ export class UpdateTaskModalComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    @Optional() private dialogRef: MatDialogRef<UpdateTaskModalComponent>
+    @Optional() private dialogRef: MatDialogRef<UpdateTaskModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
     this.taskForm = this.formBuilder.group({
-      title: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      title: [this.data.title, [Validators.required]],
+      description: [this.data.description, [Validators.required]],
     });
   }
 

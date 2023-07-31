@@ -52,8 +52,15 @@ export class TaskComponent implements OnInit {
   updateTask() {
     if (!this.isModalOpen) {
       this.isModalOpen = true;
+
+      const data = {
+        title: this.task.title,
+        description: this.task.description,
+      };
+
       const dialogRef = this.modalService.creationModalOpen(
-        UpdateTaskModalComponent
+        UpdateTaskModalComponent,
+        data
       );
 
       dialogRef.afterClosed().subscribe((result) => {
