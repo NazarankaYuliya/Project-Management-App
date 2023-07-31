@@ -17,11 +17,14 @@ export class AuthService {
   private token: string | null = null;
   private login: string | null = null;
   private userId: null | string = null;
+  private tokenCheckInterval: any;
 
   private loggedInSubject: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.startTokenExpirationCheck();
+  }
 
   signup(user: User): Observable<UserResponse> {
     return this.http
@@ -81,7 +84,7 @@ export class AuthService {
     this.login = null;
     this.userId = null;
     localStorage.clear();
-
+    this.stopTokenExpirationCheck();
     this.router.navigate(['/welcome']);
   }
 
@@ -104,6 +107,23 @@ export class AuthService {
       return null;
     } catch (error) {
       return null;
+    }
+  }
+
+  private startTokenExpirationCheck() {
+    this.stopTokenExpirationCheck();
+
+    this.tokenCheckInterval = setInterval(() => {
+      if (this.isTokenExpired()) {
+        alert('Your session has expired. Please log in again to continue.');
+        this.logout();
+      }
+    }, 600000);
+  }
+
+  private stopTokenExpirationCheck() {
+    if (this.tokenCheckInterval) {
+      clearInterval(this.tokenCheckInterval);
     }
   }
 
