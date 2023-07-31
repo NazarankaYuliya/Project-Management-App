@@ -15,10 +15,20 @@
 
 .column-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  flex-direction: column;
+  align-items: flex-start;
   border-bottom: 1px solid #ccc;
+}
+
+input {
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.edit-bnts {
+  display: flex;
+  column-gap: 10px;
 }
 
 .column-header h4 {
@@ -26,7 +36,8 @@
   color: #444;
 }
 
-.delete-button {
+.delete-button,
+button {
   background-color: #999;
   color: #fff;
   padding: 5px 10px;
@@ -37,6 +48,7 @@
   font-weight: bold;
   text-decoration: none;
   transition: background-color 0.3s ease-in-out;
+  margin-bottom: 10px;
 }
 
 .delete-button:hover {
@@ -48,6 +60,7 @@
   flex-direction: column;
   gap: 10px;
   overflow-y: scroll;
+  margin-top: 10px;
 }
 
 .tasks-container button {

@@ -1,10 +1,20 @@
 <div class="wrapper">
-    <div class="column" cdkDropList *ngIf="this.column._id" [cdkDropListData]="tasks"
-        (cdkDropListDropped)="drop($event)">
+    <div class="column" cdkDropList *ngIf="this.column._id" (cdkDropListDropped)="drop($event)">
         <div class="column-header">
-            <h4 (click)="updateColumn()">{{column.title | uppercase}}
-            </h4>
-            <button class="delete-button" (click)="deleteColumn()">Delete Column</button>
+            <ng-container *ngIf="!isEditMode; else editMode">
+                <h4 (click)="toggleEditMode()">{{column.title | uppercase}}</h4>
+                <button class="delete-button" (click)="deleteColumn()">Delete Column</button>
+            </ng-container>
+            <ng-template #editMode>
+                <input type="text" [(ngModel)]="column.title" />
+                <div class="edit-bnts">
+                    <button (click)="submitEdit()">Save</button>
+                    <button (click)="cancelEdit()">Cancel</button>
+                </div>
+
+
+            </ng-template>
+
         </div>
 
 

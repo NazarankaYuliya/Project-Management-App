@@ -5,7 +5,6 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { AddTaskModalComponent } from 'src/app/modal/add-task-modal/add-task-modal.component';
-import { UpdateColumnModalComponent } from 'src/app/modal/update-column-modal/update-column-modal.component';
 import { Column, Task } from 'src/app/models/app.models';
 import { AuthService } from 'src/app/services/auth.service';
 import { BackendService } from 'src/app/services/backend.service';
@@ -25,6 +24,7 @@ export class ColumnComponent implements OnInit {
   @Output() columnUpdated: EventEmitter<Column> = new EventEmitter<Column>();
 
   private isModalOpen = false;
+  isEditMode = false;
   tasks: Task[] = [];
   test: Task[] = [
     { title: 'test', order: 0, description: 'test', userId: 'test', users: [] },
@@ -70,36 +70,32 @@ export class ColumnComponent implements OnInit {
     }
   }
 
-  updateColumn() {
-    if (!this.isModalOpen) {
-      this.isModalOpen = true;
-      const dialogRef = this.modalService.creationModalOpen(
-        UpdateColumnModalComponent
-      );
+  toggleEditMode() {
+    this.isEditMode = !this.isEditMode;
+  }
 
-      dialogRef.afterClosed().subscribe((result) => {
-        this.isModalOpen = false;
+  cancelEdit() {
+    this.isEditMode = false;
+  }
 
-        if (result && result.submitted) {
-          const updatedData: Column = {
-            title: result.data.title,
-            order: this.column.order,
-          };
-          if (this.boardId && this.column._id) {
-            this.backendService
-              .updateColumn(this.boardId, this.column._id, updatedData)
-              .subscribe(
-                (response) => {
-                  this.columnUpdated.emit(response);
-                  dialogRef.close();
-                },
-                (error) => {
-                  console.error(error);
-                }
-              );
+  submitEdit() {
+    this.isEditMode = false;
+    const updatedData: Column = {
+      title: this.column.title,
+      order: this.column.order,
+    };
+
+    if (this.boardId && this.column._id) {
+      this.backendService
+        .updateColumn(this.boardId, this.column._id, updatedData)
+        .subscribe(
+          (response) => {
+            this.columnUpdated.emit(response);
+          },
+          (error) => {
+            console.error(error);
           }
-        }
-      });
+        );
     }
   }
 
@@ -165,15 +161,6 @@ export class ColumnComponent implements OnInit {
 
       moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
       this.updateTaskOrder();
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-
-      const targetColumnId = this.column._id;
     }
   }
 
