@@ -1,0 +1,41 @@
+.links p {
+  text-align: center;
+  font-size: 18px;
+}
+
+footer {
+  padding: 15px;
+  margin: 0;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  column-gap: 30px;
+  padding: 0 20px;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .links .course-logo {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  footer {
+    padding: 10px;
+  }
+
+  .links a {
+    margin-bottom: 10px;
+  }
+
+  .links .course-logo {
+    font-size: 18px;
+  }
+}

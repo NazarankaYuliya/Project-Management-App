@@ -1,0 +1,35 @@
+<div class="wrapper">
+    <div class="profile-info">
+
+        <p>Name: {{userName | uppercase}}</p>
+
+        <p>Login: {{userLogin | uppercase}} </p>
+
+        <button type="button" class="delete-btn" (click)="onDelete()">Delete User</button>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <h2>Edit profile</h2>
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" formControlName="name" placeholder="Enter a new name">
+            <p *ngIf="this.profileForm.get('name')?.invalid && this.profileForm.get('name')?.touched"><small>Name is
+                    required
+                    (min.length
+                    = 2)</small></p>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" formControlName="password"
+                placeholder="Enter a new password">
+            <p *ngIf="this.profileForm.get('password')?.invalid && this.profileForm.get('password')?.touched">
+                <small>Password
+                    is
+                    required
+                    (min.length = 4)</small></p>
+        </div>
+        <button type="submit" class="submit-btn">Save changes</button>
+        <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+
+    </form>
+</div>

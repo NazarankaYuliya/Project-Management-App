@@ -1,0 +1,25 @@
+<div class="wrapper">
+    <div class="main-route">
+        <div class="main-route-title">
+            <h2>{{'Your Boards' | uppercase}}</h2>
+        </div>
+        <div class="board-container">
+            <button class="create-button">
+                <a mat-raised-button color="primary" (click)="createBoard()">Create New Board</a>
+            </button>
+            <div class="boards">
+                <div class="board" *ngFor="let board of (boards$ | async)">
+                    <div class="board-info" [routerLink]="['/board', board._id]">
+                        <p class="board-owner">Owner: {{ board.owner }}</p>
+                        <p class="board-title">{{ board.title | uppercase }}</p>
+                    </div>
+
+                    <button class="delete-button" *ngIf="board._id" (click)="deleteBoard(board._id)">Delete
+                        board</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

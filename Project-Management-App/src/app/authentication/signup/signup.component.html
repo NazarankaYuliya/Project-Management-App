@@ -1,0 +1,28 @@
+<div class="wrapper">
+    <form [formGroup]="form" (ngSubmit)="signup(form)">
+        <h2>Sign Up</h2>
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" formControlName="name" placeholder="Enter a name">
+            <p *ngIf="this.form.get('name')?.invalid && this.form.get('name')?.touched"><small>Name is required
+                    (min.length
+                    = 2)</small></p>
+        </div>
+        <div>
+            <label for="login">Login</label>
+            <input type="text" id="login" name="login" formControlName="login" placeholder="Enter a login">
+            <p *ngIf="this.form.get('login')?.invalid && this.form.get('login')?.touched"><small>Login is required
+                    (min.length = 2)</small>
+            </p>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" formControlName="password"
+                placeholder="Enter a password">
+            <p *ngIf="this.form.get('password')?.invalid && this.form.get('password')?.touched"><small>Password is
+                    required
+                    (min.length = 4)</small></p>
+        </div>
+        <button type="submit" class="submit-btn">Sign Up</button>
+    </form>
+</div>

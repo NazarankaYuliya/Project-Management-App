@@ -1,0 +1,12 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.router-outlet-container {
+  flex: 1;
+  background-color: #f2f2f2;
+  overflow-y: scroll;
+}
